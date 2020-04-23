@@ -1,0 +1,129 @@
+import pygame as pg
+import random
+from sys import path
+from sys import exit
+import os
+
+red = (255,0,0)
+green = (0,255,0)
+blue = (0,0,255)
+white = (255,255,255)
+black = (0,0,0)
+
+my_path = os.path.dirname(os.path.realpath(__file__))
+os.chdir(my_path)
+path.append(my_path)
+#import expy
+
+#Setup
+pg.init()
+screen = pg.display.set_mode((800,600)) #set your window size, (x,y)
+pg.display.set_caption("Flappy Bird")
+clock = pg.time.Clock()
+myRand = random.randint(10,400)
+
+play = 1
+Bird = pg.Rect(100, 300, 45, 45)
+up = -8
+down = 8
+score = 0
+highscore = 0
+highscore = score
+
+
+x = 100
+y = 300
+
+#Birdimage = pg.image.load(r"C:\Users\Oscar Ma\Desktop\tumblr_n0dw9jUXOD1s6294bo1_r2_500.png")
+#Birdimage = pg.transform.scale(Birdimage, (75, 75))
+#Background = pg.image.load("bird background.jpg")
+Obstacle1 = pg.Rect(700, 0, 100, myRand)
+Obstacle2  = pg.Rect(700, myRand + 150, 100, 5000)
+restart = pg.Rect(200, 400, 400, 50)
+
+
+Obstaclespeed = -10
+
+teleport = 800
+
+#def endgame():
+   # while play==0:
+      #  pg.event.pump()
+       # screen.fill(green)
+       # expy.printText(screen, black,"YOU LOST",200,100,100)
+       # pg.draw.rect(screen, red, restart)
+       # expy.printText(screen, black," Click anywhere to Restart",200, 400, 20)
+       # if L == 1:
+        #    play = 1
+       # pg.display.flip
+        #clock.tick(30)
+
+#Main Program
+
+while play == 1:
+        pg.event.pump()
+
+while(True):
+
+    #UPDATES
+
+    Obstacle1[0] += Obstaclespeed
+    Obstacle2[0] += Obstaclespeed
+    #INPUTS
+    mx,my = pg.mouse.get_pos()
+    L,M,R = pg.mouse.get_pressed()
+    #EVENTS
+    if L == 1:
+        Bird[1] += up
+
+    if L == 0:
+        Bird[1] += down
+    if Obstacle1.collidepoint(0,0):
+        score += 1
+        Obstacle1[0] = teleport
+        myRand = random.randint(10,400)
+        Obstacle1 = pg.Rect(700, 0, 100, myRand)
+        Obstacle2  = pg.Rect(700, myRand + 150, 100, 5000)
+    if Obstacle1[0]==800:
+
+     if Obstacle2.collidepoint(0,800):
+        score += 1
+        Obstacle2[0] = teleport
+        myRand = random.randint(10,400)
+        Obstacle1 = pg.Rect(700, 0, 100, myRand)
+        Obstacle2  = pg.Rect(700, myRand + 150, 100, 5000)
+
+
+
+    if Bird.colliderect(Obstacle1) or Bird.colliderect(Obstacle2) or Bird.collidepoint(100, 0) or Bird.collidepoint(100, 600):
+        play = 0
+
+
+
+
+    #DRAW
+    screen.blit(Background,(0, 0))
+    print (highscore)
+    pg.draw.ellipse(screen, blue, Bird)
+    pg.draw.rect(screen, green, Obstacle1)
+    pg.draw.rect(screen, green, Obstacle2)
+  #  screen.blit(Birdimage, (Bird[0] - 12, Bird[1] - 12))
+   # expy.printText(screen,white,"Score:",10,10,30)
+   # expy.printText(screen,white,score, 10, 50,30)
+   # expy.printText(screen,white,"High Score:", 550, 10,30)
+   # expy.printText(screen,white,highscore, 750, 10,30)
+   # if score > highscore:
+     # highscore = score
+     # print (highscore)
+      #if play==0:
+        #endgame()
+
+
+
+
+
+
+
+    pg.display.flip()
+    #CLOCK
+    clock.tick(30)
